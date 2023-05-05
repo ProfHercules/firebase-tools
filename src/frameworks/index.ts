@@ -334,11 +334,16 @@ export async function prepareFrameworks(
       const existingFunctionsConfig = options.config.get("functions")
         ? [].concat(options.config.get("functions"))
         : [];
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      const existingIgnore = existingFunctionsConfig.flatMap((c) => (c as any).ignore || []);
+
       options.config.set("functions", [
         ...existingFunctionsConfig,
         {
           source: relative(projectRoot, functionsDist),
           codebase,
+          ignore: existingIgnore,
         },
       ]);
 
